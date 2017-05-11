@@ -288,7 +288,7 @@
     <orderEntry type="library" name="Maven: org.apache.pdfbox:fontbox:2.0.4" level="project" />
     <orderEntry type="library" name="Maven: commons-logging:commons-logging:1.2" level="project" />
     <orderEntry type="library" name="Maven: org.bouncycastle:bcprov-jdk16:1.45" level="project" />
-    <orderEntry type="library" name="Maven: com.github.russorat:cognitivej:master-0.6.1-g9edda3f-21" level="project" />
+    <orderEntry type="library" name="Maven: com.github.CognitiveJ:cognitivej:master-0.6.1-g59007ba-20" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient:4.5.2" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore:4.4.4" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpasyncclient:4.1.1" level="project" />

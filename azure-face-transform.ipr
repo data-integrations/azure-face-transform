@@ -677,6 +677,17 @@
         <root url="jar://$MAVEN_REPOSITORY$/com/fasterxml/jackson/module/jackson-module-scala_2.10/2.4.4/jackson-module-scala_2.10-2.4.4-sources.jar!/" />
       </SOURCES>
     </library>
+    <library name="Maven: com.github.CognitiveJ:cognitivej:master-0.6.1-g59007ba-20">
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/com/github/CognitiveJ/cognitivej/master-0.6.1-g59007ba-20/cognitivej-master-0.6.1-g59007ba-20.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/com/github/CognitiveJ/cognitivej/master-0.6.1-g59007ba-20/cognitivej-master-0.6.1-g59007ba-20-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/com/github/CognitiveJ/cognitivej/master-0.6.1-g59007ba-20/cognitivej-master-0.6.1-g59007ba-20-sources.jar!/" />
+      </SOURCES>
+    </library>
     <library name="Maven: com.github.fommil.netlib:core:1.1.2">
       <CLASSES>
         <root url="jar://$MAVEN_REPOSITORY$/com/github/fommil/netlib/core/1.1.2/core-1.1.2.jar!/" />
@@ -686,17 +697,6 @@
       </JAVADOC>
       <SOURCES>
         <root url="jar://$MAVEN_REPOSITORY$/com/github/fommil/netlib/core/1.1.2/core-1.1.2-sources.jar!/" />
-      </SOURCES>
-    </library>
-    <library name="Maven: com.github.russorat:cognitivej:master-0.6.1-g9edda3f-21">
-      <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/com/github/russorat/CognitiveJ/master-0.6.1-g9edda3f-21/cognitivej-master-0.6.1-g9edda3f-21.jar!/" />
-      </CLASSES>
-      <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/com/github/russorat/CognitiveJ/master-0.6.1-g9edda3f-21/cognitivej-master-0.6.1-g9edda3f-21-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/com/github/russorat/CognitiveJ/master-0.6.1-g9edda3f-21/cognitivej-master-0.6.1-g9edda3f-21-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="Maven: com.github.rwl:jtransforms:2.4.0">

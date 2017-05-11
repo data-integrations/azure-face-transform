@@ -18,7 +18,7 @@ Properties
 | **Source Field Name** | **Y** | None | This is the name of the field on the input record containing the image file. It must be of type ``bytes`` and it must contain the entire contents of the image file. |
 | **Face API Key** | **Y** | None | This key is obtained from the Azure Portal after enabling the Face API. |
 | **Emotion API Key** | **Y** | None | This key is obtained from the Azure Portal after enabling the Emotion API. |
-| **Continue Processing If There Are Errors?** | **Y** | false | Indicates if the pipeline should continue if processing a single PDF fails. |
+| **Continue Processing If There Are Errors?** | **Y** | false | Indicates if the pipeline should continue if processing a single image fails. |
 
 Usage Notes
 -----------
