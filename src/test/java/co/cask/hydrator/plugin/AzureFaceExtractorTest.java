@@ -24,7 +24,6 @@ import co.cask.cdap.etl.mock.common.MockPipelineConfigurer;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -41,7 +40,7 @@ public class AzureFaceExtractorTest {
                                                       Schema.Field.of("a",
                                                                       Schema.arrayOf(Schema.of(Schema.Type.STRING))));
 
-  // These are some arbitrary PDF files obtained from data.gov for testing
+  // These are some arbitrary image files for testing
   private static String[] imageFiles = new String[] {
     "IMG_4376.JPG",
     "C819Ix6VoAAIcV8.jpg",
