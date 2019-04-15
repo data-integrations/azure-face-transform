@@ -1,15 +1,15 @@
 # Azure Face Extractor Transform
 
-[![cm-available](https://cdap-users.herokuapp.com/assets/cm-available.svg)](https://docs.cask.co/cdap/current/en/integrations/cask-market.html)
+[![cm-available](https://cdap-users.herokuapp.com/assets/cm-available.svg)](https://docs.cdap.io/cdap/current/en/integrations/cask-market.html)
 ![cdap-action](https://cdap-users.herokuapp.com/assets/cdap-action.svg)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Join CDAP community](https://cdap-users.herokuapp.com/badge.svg?t=wrangler)](https://cdap-users.herokuapp.com?t=1)
 
 Description
 -----------
-This transform leverages the [CognitiveJ](https://github.com/CognitiveJ/cognitivej) library, and in turn the [Azure Cognitive APIs](https://azure.microsoft.com/en-us/services/cognitive-services/) to extract 
-faces and other metadata, including emotions, from a set of images. It is usually used in conjunction with the Whole File Reader plugin since it requires the entire contents of each image to be loaded into a single message and passed into the transform. 
-Due to this, there may be memory issues when loading large images. This leverages the [Face API](https://docs.microsoft.com/en-us/azure/cognitive-services/face/) and the [Emotion API](https://docs.microsoft.com/en-us/azure/cognitive-services/emotion/home) specifically for this task. 
+This transform leverages the [CognitiveJ](https://github.com/CognitiveJ/cognitivej) library, and in turn the [Azure Cognitive APIs](https://azure.microsoft.com/en-us/services/cognitive-services/) to extract
+faces and other metadata, including emotions, from a set of images. It is usually used in conjunction with the Whole File Reader plugin since it requires the entire contents of each image to be loaded into a single message and passed into the transform.
+Due to this, there may be memory issues when loading large images. This leverages the [Face API](https://docs.microsoft.com/en-us/azure/cognitive-services/face/) and the [Emotion API](https://docs.microsoft.com/en-us/azure/cognitive-services/emotion/home) specifically for this task.
 
 Use Case
 --------
@@ -66,8 +66,8 @@ CDAP User Group and Development Discussions:
 - `cdap-user@googlegroups.com <https://groups.google.com/d/forum/cdap-user>`__
 
 The *cdap-user* mailing list is primarily for users using the product to develop
-applications or building plugins for appplications. You can expect questions from 
-users, release announcements, and any other discussions that we think will be helpful 
+applications or building plugins for appplications. You can expect questions from
+users, release announcements, and any other discussions that we think will be helpful
 to the users.
 
 ## IRC Channel
@@ -84,9 +84,9 @@ in compliance with the License. You may obtain a copy of the License at
 
 http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software distributed under the 
-License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
-either express or implied. See the License for the specific language governing permissions 
+Unless required by applicable law or agreed to in writing, software distributed under the
+License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+either express or implied. See the License for the specific language governing permissions
 and limitations under the License.
 
 Cask is a trademark of Cask Data, Inc. All rights reserved.
