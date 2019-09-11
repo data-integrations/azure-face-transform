@@ -27,7 +27,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <cdap.version>6.0.0-SNAPSHOT</cdap.version>
+    <cdap.version>6.1.0-SNAPSHOT</cdap.version>
     <guava.version>19.0</guava.version>
     <unirest-java.version>1.4.9</unirest-java.version>
     <commons-lang3.version>3.0</commons-lang3.version>
@@ -37,11 +37,11 @@
     <widgets.dir>widgets</widgets.dir>
     <docs.dir>docs</docs.dir>
     <!-- These are the application template artifacts that this plugin will be available for. -->
-    <app.parents>system:cdap-data-pipeline[6.0.0-SNAPSHOT,7.0.0-SNAPSHOT),system:cdap-data-streams[6.0.0-SNAPSHOT,7.0.0-SNAPSHOT)</app.parents>
+    <app.parents>system:cdap-data-pipeline[6.1.0-SNAPSHOT,7.0.0-SNAPSHOT),system:cdap-data-streams[6.1.0-SNAPSHOT,7.0.0-SNAPSHOT)</app.parents>
     <!-- this is here because project.basedir evaluates to null in the script build step -->
     <main.basedir>${project.basedir}</main.basedir>
     <!-- This is the list of packages where your code exists. You can add multiple and separated with a ; or use wildcards *. -->
-    <exported-packages>io.cdap.plugin*;com.mashape.unirest*</exported-packages>
+    <exported-packages>io.cdap.plugin.azure.face.extractor.*;com.mashape.unirest*</exported-packages>
   </properties>
 
   <repositories>
