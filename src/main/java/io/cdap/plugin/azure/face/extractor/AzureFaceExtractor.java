@@ -14,23 +14,23 @@
  * the License.
  */
 
-package io.cdap.plugin;
+package io.cdap.plugin.azure.face.extractor;
 
-import io.cdap.cdap.api.annotation.Description;
-import io.cdap.cdap.api.annotation.Macro;
-import io.cdap.cdap.api.annotation.Name;
-import io.cdap.cdap.api.annotation.Plugin;
-import io.cdap.cdap.api.data.format.StructuredRecord;
-import io.cdap.cdap.api.data.schema.Schema;
-import io.cdap.cdap.api.plugin.PluginConfig;
-import io.cdap.cdap.etl.api.Emitter;
-import io.cdap.cdap.etl.api.PipelineConfigurer;
-import io.cdap.cdap.etl.api.Transform;
-import io.cdap.cdap.etl.api.TransformContext;
 import cognitivej.vision.emotion.Emotion;
 import cognitivej.vision.face.scenario.FaceScenarios;
 import cognitivej.vision.face.task.Face;
 import com.google.common.annotations.VisibleForTesting;
+import io.cdap.cdap.api.annotation.Description;
+import io.cdap.cdap.api.annotation.Name;
+import io.cdap.cdap.api.annotation.Plugin;
+import io.cdap.cdap.api.data.format.StructuredRecord;
+import io.cdap.cdap.api.data.schema.Schema;
+import io.cdap.cdap.etl.api.Emitter;
+import io.cdap.cdap.etl.api.FailureCollector;
+import io.cdap.cdap.etl.api.PipelineConfigurer;
+import io.cdap.cdap.etl.api.StageSubmitterContext;
+import io.cdap.cdap.etl.api.Transform;
+import io.cdap.cdap.etl.api.TransformContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,7 +48,7 @@ import java.util.Map;
 public final class AzureFaceExtractor extends Transform<StructuredRecord, StructuredRecord> {
   private static final Logger LOG = LoggerFactory.getLogger(AzureFaceExtractor.class);
 
-  private final Config config;
+  private final AzureFaceExtractorConfig config;
   private static final Schema outputSchema =
     Schema.recordOf("output",
                     Schema.Field.of("raw_image_data", Schema.nullableOf(Schema.of(Schema.Type.BYTES))),
@@ -78,7 +78,7 @@ public final class AzureFaceExtractor extends Transform<StructuredRecord, Struct
   private FaceScenarios faceScenarios;
 
   @VisibleForTesting
-  public AzureFaceExtractor(Config config) {
+  public AzureFaceExtractor(AzureFaceExtractorConfig config) {
     this.config = config;
   }
 
@@ -86,21 +86,34 @@ public final class AzureFaceExtractor extends Transform<StructuredRecord, Struct
   public void configurePipeline(PipelineConfigurer pipelineConfigurer) throws IllegalArgumentException {
     super.configurePipeline(pipelineConfigurer);
     Schema inputSchema = pipelineConfigurer.getStageConfigurer().getInputSchema();
-    config.validate(inputSchema);
+    FailureCollector failureCollector = pipelineConfigurer.getStageConfigurer().getFailureCollector();
+
+    config.validate(failureCollector, inputSchema);
+
     pipelineConfigurer.getStageConfigurer().setOutputSchema(outputSchema);
+  }
+
+  @Override
+  public void prepareRun(StageSubmitterContext context) throws Exception {
+    super.prepareRun(context);
+
+    FailureCollector failureCollector = context.getFailureCollector();
+    Schema inputSchema = context.getInputSchema();
+    config.validate(failureCollector, inputSchema);
+    failureCollector.getOrThrowException();
   }
 
   @Override
   public void initialize(TransformContext context) throws Exception {
     super.initialize(context);
-    faceScenarios = new FaceScenarios(config.facesSubscriptionKey,
-                                      config.emotionSubscriptionKey);
+    faceScenarios = new FaceScenarios(config.getFacesSubscriptionKey(),
+                                      config.getEmotionSubscriptionKey());
   }
 
   @Override
   public void transform(StructuredRecord in, Emitter<StructuredRecord> emitter) throws Exception {
-    if (in.get(config.sourceFieldName) != null) {
-      InputStream inputStream = new ByteArrayInputStream((byte[]) in.get(config.sourceFieldName));
+    if (in.get(config.getSourceFieldName()) != null) {
+      InputStream inputStream = new ByteArrayInputStream((byte[]) in.get(config.getSourceFieldName()));
       List<Face> faces = faceScenarios.findFaces(inputStream);
       inputStream.reset();
       List<Emotion> emotions = faceScenarios.findEmotionFaces(inputStream);
@@ -115,7 +128,7 @@ public final class AzureFaceExtractor extends Transform<StructuredRecord, Struct
               }
             }
             StructuredRecord.Builder outputBuilder = StructuredRecord.builder(outputSchema)
-              .set("raw_image_data", in.get(config.sourceFieldName))
+              .set("raw_image_data", in.get(config.getSourceFieldName()))
               .set("rectangle_left", face.faceRectangle.left)
               .set("rectangle_top", face.faceRectangle.top)
               .set("rectangle_height", face.faceRectangle.height)
@@ -143,7 +156,7 @@ public final class AzureFaceExtractor extends Transform<StructuredRecord, Struct
             }
             emitter.emit(outputBuilder.build());
           } catch (Exception e) {
-            if (!config.continueOnError) {
+            if (!config.getContinueOnError()) {
               throw e;
             } else {
               LOG.warn("Received an exception from Azure webservices. Ignoring because continue on error is true.", e);
@@ -152,59 +165,6 @@ public final class AzureFaceExtractor extends Transform<StructuredRecord, Struct
         }
       }
       inputStream.close();
-    }
-  }
-
-  /**
-   * Azure Face Extractor plugin configuration.
-   */
-  public static class Config extends PluginConfig {
-    @Name("sourceFieldName")
-    @Description("Specifies the input field containing the binary pdf data.")
-    private final String sourceFieldName;
-
-    @Macro
-    @Description("Set to true if this plugin should ignore errors.")
-    private Boolean continueOnError;
-
-    @Name("facesSubscriptionKey")
-    @Description("The Azure Faces API subscription key.")
-    @Macro
-    private String facesSubscriptionKey;
-
-    @Name("emotionSubscriptionKey")
-    @Description("The Azure emotion API subscription key.")
-    @Macro
-    private String emotionSubscriptionKey;
-
-    public Config(String sourceFieldName, Boolean continueOnError,
-                  String facesSubscriptionKey, String emotionSubscriptionKey) {
-      this.sourceFieldName = sourceFieldName;
-      this.continueOnError = continueOnError;
-      this.facesSubscriptionKey = facesSubscriptionKey;
-      this.emotionSubscriptionKey = emotionSubscriptionKey;
-    }
-
-    public void validate(Schema inputSchema) {
-      if (inputSchema == null) {
-        throw new IllegalArgumentException("Could not get the input schema to validate.");
-      }
-      if (inputSchema.getField(sourceFieldName) == null) {
-        throw new IllegalArgumentException("Source field was not present in the input schema. Schema: " +
-                                             inputSchema.toString());
-      }
-      if (!inputSchema.getField(sourceFieldName).getSchema().isSimpleOrNullableSimple()) {
-        throw new IllegalArgumentException("Input field must be a simple type but was type: " +
-                                             inputSchema.getField(sourceFieldName).getSchema().getType());
-      }
-      Schema.Type fieldType = inputSchema.getField(sourceFieldName).getSchema().getType();
-      if (inputSchema.getField(sourceFieldName).getSchema().isNullable()) {
-        fieldType = inputSchema.getField(sourceFieldName).getSchema().getNonNullable().getType();
-      }
-      if(fieldType != Schema.Type.BYTES) {
-        throw new IllegalArgumentException("Input field must be bytes but was: " +
-                                             inputSchema.getField(sourceFieldName).getSchema().getType());
-      }
     }
   }
 }

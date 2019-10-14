@@ -14,11 +14,13 @@
  * the License.
  */
 
-package io.cdap.plugin;
+package io.cdap.plugin.azure.face.extractor;
 
 import io.cdap.cdap.api.data.format.StructuredRecord;
 import io.cdap.cdap.api.data.schema.Schema;
+import io.cdap.cdap.etl.api.FailureCollector;
 import io.cdap.cdap.etl.api.Transform;
+import io.cdap.cdap.etl.api.validation.ValidationException;
 import io.cdap.cdap.etl.mock.common.MockPipelineConfigurer;
 import org.junit.Test;
 
@@ -70,17 +72,20 @@ public class AzureFaceExtractorTest {
   }
   */
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test(expected = ValidationException.class)
   public void testFieldNotInInputSchema() throws Exception {
-    AzureFaceExtractor.Config config = new AzureFaceExtractor.Config("body", true, "ANYTHING", "ANYTHING");
+    AzureFaceExtractorConfig config = new AzureFaceExtractorConfig("body", true, "ANYTHING", "ANYTHING");
     Transform<StructuredRecord, StructuredRecord> transform = new AzureFaceExtractor(config);
     transform.configurePipeline(new MockPipelineConfigurer(INVALID_INPUT));
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test(expected = ValidationException.class)
   public void testInputTypeNotBytesSchema() throws Exception {
-    AzureFaceExtractor.Config config = new AzureFaceExtractor.Config("a", true, "ANYTHING", "ANYTHING");
+    AzureFaceExtractorConfig config = new AzureFaceExtractorConfig("a", true, "ANYTHING", "ANYTHING");
     Transform<StructuredRecord, StructuredRecord> transform = new AzureFaceExtractor(config);
-    transform.configurePipeline(new MockPipelineConfigurer(INVALID_INPUT));
+    MockPipelineConfigurer mockPipelineConfigurer = new MockPipelineConfigurer(INVALID_INPUT);
+    transform.configurePipeline(mockPipelineConfigurer);
+    FailureCollector failureCollector = mockPipelineConfigurer.getStageConfigurer().getFailureCollector();
+    failureCollector.getOrThrowException();
   }
 }
